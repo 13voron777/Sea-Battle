@@ -48,30 +48,40 @@ public class Battleship {
         int count = 1;
         while (deck != 0) {
             for (int i = 0; i < count; i++) {
-                System.out.println("Creating " + deck + "-deck ship: ");
-                try {
-                    int x;
-                    int y;
-                    while (true) {
-                        System.out.print("Enter x and y coordinates: ");
+                int x;
+                int y;
+                while (true) {
+                    System.out.println("Creating " + deck + "-deck ship: ");
+                    try {
+                        System.out.print("Enter x: ");
                         x = scanner.nextInt();
+                        System.out.print("Enter y: ");
                         y = scanner.nextInt();
-                        if (x >= 0 && x < field.getField().length &&
-                                y >= 0 && y < field.getField().length) {
-                            try {
-                                field.shoot(x, y, deck);
-                            } catch (ArrayIndexOutOfBoundsException e) {
-                                continue;
-                            }
+                    } catch (InputMismatchException e) {
+                        System.out.println("Wrong input!");
+                        continue;
+                    }
+                    if (x >= 0 && x < field.getField().length &&
+                            y >= 0 && y < field.getField()[0].length) {
+                        if ((x + deck) < field.getField().length &&
+                                (y + deck) < field.getField()[0].length) {
+                            field.shoot(x, y, deck);
                             break;
+                        } else {
+                            System.out.println("Array bounds error");
                         }
-                        System.out.println("Wrong x and y!");
+                    }
+                    System.out.println("Wrong x and y!");
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                     clearScreen();
-                    field.createField();
-                } catch (InputMismatchException e) {
-                    System.out.println("Wrong input!");
                 }
+                clearScreen();
+                field.createField();
+
             }
             count++;
             deck--;
@@ -87,34 +97,38 @@ public class Battleship {
     public static void makeShoot(String player, Field enemyField, Field field, int isAlive) {
         enemyField.createField();
         System.out.println(player + ", please, make a shoot.");
-        try {
-            int x;
-            int y;
-            while (true) {
-                System.out.print("Enter x and y enemy's coordinates: ");
+
+        int x;
+        int y;
+        while (true) {
+            System.out.print("Enter x and y enemy's coordinates: ");
+            try {
+                System.out.print("Enter x: ");
                 x = scanner.nextInt();
+                System.out.print("Enter y: ");
                 y = scanner.nextInt();
-                if (x >= 0 && x < field.getField().length &&
-                        y >= 0 && y < field.getField().length) {
-                    break;
-                }
-                System.out.println("Wrong enemy's x and y!");
+            } catch (InputMismatchException e) {
+                System.out.println("Wrong input!");
+                continue;
             }
-            if (field.getField()[x][y].equals("0")) {
-                enemyField.getField()[x][y] = "X";
-                System.out.println("Hit! Your turn again");
-                makeShoot(player, enemyField, field, isAlive);
-                if (isAlive == 1) {
-                    isAlive1--;
-                } else {
-                    isAlive2--;
-                }
+            if (x >= 0 && x < field.getField().length &&
+                    y >= 0 && y < field.getField().length) {
+                break;
+            }
+            System.out.println("Wrong enemy's x and y!");
+        }
+        if (field.getField()[x][y].equals("0")) {
+            enemyField.getField()[x][y] = "X";
+            System.out.println("Hit! Your turn again");
+            makeShoot(player, enemyField, field, isAlive);
+            if (isAlive == 1) {
+                isAlive1--;
             } else {
-                enemyField.getField()[x][y] = "-";
-                System.out.println("Miss! Enemy's turn");
+                isAlive2--;
             }
-        } catch (InputMismatchException e) {
-            System.out.println("Wrong input!");
+        } else {
+            enemyField.getField()[x][y] = "-";
+            System.out.println("Miss! Enemy's turn");
         }
     }
 

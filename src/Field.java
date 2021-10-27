@@ -23,7 +23,7 @@ public class Field {
         for (int i = 0; i < 10; i++) {
             System.out.print("|" + i + "|");
             for (int j = 0; j < 10; j++) {
-                System.out.print(this.field[j][i] + "|");
+                System.out.print(field[j][i] + "|");
             }
             System.out.println();
         }
@@ -32,30 +32,26 @@ public class Field {
 
     public void shoot(int x, int y, int deck) {
         if (deck != 1) {
-            try {
-                while (true) {
-                    System.out.println("Please, choose direction of the ship.");
-                    System.out.print("Horisontal (h) or Vertical (v): ");
-                    String dir = scanner.next();
-                    if (dir.equals("h")) {
-                        for (int j = 0; j < deck; j++) {
-                            this.field[x + j][y] = "0";
-                        }
-                        break;
-                    } else if (dir.equals("v")) {
-                        for (int j = 0; j < deck; j++) {
-                            this.field[x][y + j] = "0";
-                        }
-                        break;
-                    } else {
-                        System.out.println("Wrong direction input!");
+            while (true) {
+                System.out.println("Please, choose direction of the ship.");
+                System.out.print("Horisontal (h) or Vertical (v): ");
+                String dir = scanner.next();
+                if (dir.equals("h")) {
+                    for (int j = 0; j < deck; j++) {
+                        field[x + j][y] = "0";
                     }
+                    break;
+                } else if (dir.equals("v")) {
+                    for (int j = 0; j < deck; j++) {
+                        field[x][y + j] = "0";
+                    }
+                    break;
+                } else {
+                    System.out.println("Wrong direction input!");
                 }
-            } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println("Array bounds error");
             }
         } else {
-            this.field[x][y] = "0";
+            field[x][y] = "0";
         }
     }
 }

@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Field {
     private Scanner scanner = new Scanner(System.in);
     private String[][] field;
+    static boolean correctInput;
 
     public Field(String[][] field) {
         this.field = field;
@@ -30,18 +31,39 @@ public class Field {
         System.out.println("-----------------------");
     }
 
-    public void shoot(int x, int y, int deck) {
+    public void placeShip(int x, int y, int deck) {
+        correctInput = true;
         if (deck != 1) {
             while (true) {
                 System.out.println("Please, choose direction of the ship.");
-                System.out.print("Horisontal (h) or Vertical (v): ");
+                System.out.print("Horizontal (h) or Vertical (v): ");
                 String dir = scanner.next();
                 if (dir.equals("h")) {
+                    if ((x + deck) > field.length) {
+                        correctInput = false;
+                        return;
+                    }
+                    for (int i = 0; i < deck; i++) {
+                        if (field[x + i][y].equals("0") || !checkAvailablePosition(x + i, y)) {
+                            correctInput = false;
+                            return;
+                        }
+                    }
                     for (int j = 0; j < deck; j++) {
                         field[x + j][y] = "0";
                     }
                     break;
                 } else if (dir.equals("v")) {
+                    if ((y + deck) > field[0].length) {
+                        correctInput = false;
+                        return;
+                    }
+                    for (int i = 0; i < deck; i++) {
+                        if (field[x][y + i].equals("0") || !checkAvailablePosition(x, y + i)) {
+                            correctInput = false;
+                            return;
+                        }
+                    }
                     for (int j = 0; j < deck; j++) {
                         field[x][y + j] = "0";
                     }
@@ -53,5 +75,19 @@ public class Field {
         } else {
             field[x][y] = "0";
         }
+    }
+
+    public boolean checkAvailablePosition(int x, int y) {
+        for (int i = x - 1; i <= x + 1; i++) {
+            for (int j = y - 1; j <= y + 1; j++) {
+                try {
+                    if (field[i][j].equals("0")) {
+                        return false;
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                }
+            }
+        }
+        return true;
     }
 }

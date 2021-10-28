@@ -136,6 +136,9 @@ public class Battleship {
         }
         if (field.getField()[x][y].equals("0")) {
             enemyField.getField()[x][y] = "X";
+            if (field.checkKilledShip(x, y, enemyField)) {
+                enemyField.fillEmptyNearKilledShip(x, y);
+            }
             if (isAlive == 1) {
                 isAlive1--;
             } else {

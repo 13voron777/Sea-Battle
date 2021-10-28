@@ -90,4 +90,50 @@ public class Field {
         }
         return true;
     }
+
+    public boolean checkKilledShip(int x, int y, Field enemyField) {
+        for (int i = x - 1; i <= x + 1; i++) {
+            for (int j = y - 1; j <= y + 1; j++) {
+                try {
+                    if (field[i][j].equals("0") && !enemyField.field[i][j].equals("X")) {
+                        return false;
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                }
+            }
+        }
+        return true;
+    }
+
+    public void fillEmptyNearKilledShip(int x, int y) {
+        boolean isEmptyHere = false;
+        for (int i = x - 1; i <= x + 1; i++) {
+            for (int j = y - 1; j <= y + 1; j++) {
+                try {
+                    if (field[i][j].equals(" ")) {
+                        field[i][j] = "-";
+                        isEmptyHere = true;
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                }
+            }
+        }
+        if (isEmptyHere) {
+            int nextX = -1;
+            int nextY = -1;
+            for (int i = x - 1; i <= x + 1; i++) {
+                for (int j = y - 1; j <= y + 1; j++) {
+                    try {
+                        if (field[i][j].equals("X")) {
+                           nextX = i;
+                           nextY = j;
+                           break;
+                        }
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                    }
+                }
+            }
+            fillEmptyNearKilledShip(nextX, nextY);
+        }
+    }
 }

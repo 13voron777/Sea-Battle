@@ -120,6 +120,8 @@ public class Battleship {
             }
             if (x >= 0 && x < field.getField().length && y >= 0 && y < field.getField()[0].length) {
                 if (enemyField.getField()[x][y].equals("X") || enemyField.getField()[x][y].equals("-")) {
+                    clearScreen();
+                    enemyField.createField();
                     System.out.println("Already shot!");
                     continue;
                 }
